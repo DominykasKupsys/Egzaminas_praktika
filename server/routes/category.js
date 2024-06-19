@@ -8,4 +8,8 @@ router.post("/create", authToken, async (req, res) => {
   await CategoryController.CreateCategory(req, res);
 });
 
+router.get("/all", async (req, res) => {
+  await CategoryController.GetCategories(req, res);
+});
+
 module.exports = router;

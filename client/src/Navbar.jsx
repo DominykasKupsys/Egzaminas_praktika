@@ -30,6 +30,14 @@ export const Navbar = () => {
             <a class="nav-link active" aria-current="page" href="/">
               Home
             </a>
+            <a class="nav-link" href="/create">
+              Create
+            </a>
+            {user && (
+              <a class="nav-link" href="/profile">
+                Profile
+              </a>
+            )}
             {user && user.role === 1 && (
               <a class="nav-link" href="/adminpanel">
                 Admin Panel
