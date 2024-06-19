@@ -14,8 +14,11 @@ export const IndexPage = () => {
   const fetchHolidays = async () => {
     const response = await fetch("http://localhost:3002/celebration/all");
     const data = await response.json();
-    setHolidays(data.data);
-    setFilteredHolidays(data.data);
+    const celebrations = data.data.filter(
+      (celebration) => celebration.isVerified === 1
+    );
+    setHolidays(celebrations);
+    setFilteredHolidays(celebrations);
   };
 
   const getCategories = async () => {

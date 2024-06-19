@@ -54,6 +54,9 @@ const PostController = {
   },
   async GetPostById(req, res) {
     const id = req.params.id;
+    if (!id) {
+      return res.status(400).json({ error: "Post ID not found" });
+    }
     try {
       const post = await prisma.celebration.findUnique({
         where: { id: parseInt(id) },
@@ -147,6 +150,11 @@ const PostController = {
   async GetUserPosts(req, res) {
     const id = parseInt(req.params.id);
 
+    if (req.tokenInfo.role == 0) {
+      return res
+        .status(403)
+        .json({ error: "You are not authorized to verify this posts" });
+    }
     try {
       const posts = await prisma.celebration.findMany({
         where: { userId: id },
@@ -155,6 +163,31 @@ const PostController = {
     } catch (error) {
       console.error("Error fetching posts:", error);
       res.status(500).json({ error: "Failed to fetch posts" });
+    }
+  },
+  async GetNotVerifiedPosts(req, res) {
+    try {
+      const posts = await prisma.celebration.findMany({
+        where: { isVerified: 0 },
+        include: { category: true, rating: true },
+      });
+      res.status(200).json({ data: posts });
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+      res.status(500).json({ error: "Failed to fetch posts" });
+    }
+  },
+  async VerifyPosts(req, res) {
+    const id = parseInt(req.params.id);
+    try {
+      const post = await prisma.celebration.update({
+        where: { id: id },
+        data: { isVerified: 1 },
+      });
+      res.status(200).json({ data: post });
+    } catch (error) {
+      console.error("Error verifying post:", error);
+      res.status(500).json({ error: "Failed to verify post" });
     }
   },
 };

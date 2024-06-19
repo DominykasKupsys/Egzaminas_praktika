@@ -11,8 +11,16 @@ router.post("/create", upload.single("image"), authToken, async (req, res) => {
 router.get("/all", async (req, res) => {
   await celebrationController.GetPosts(req, res);
 });
+
+router.get("/all/notverified", async (req, res) => {
+  await celebrationController.GetNotVerifiedPosts(req, res);
+});
 router.put("/:id", upload.single("image"), authToken, async (req, res) => {
   await celebrationController.UpdatePost(req, res);
+});
+
+router.put("/verify/:id", authToken, async (req, res) => {
+  await celebrationController.VerifyPosts(req, res);
 });
 
 router.delete("/:id", authToken, async (req, res) => {
