@@ -8,6 +8,7 @@ function authToken(req, res, next) {
   } else {
     jwt.verify(token, "secret", (err, userInfo) => {
       if (err) {
+        console.log(userInfo);
         console.log(err);
         return res.sendStatus(403);
       }
