@@ -151,10 +151,10 @@ export const AdminPanel = () => {
       )}
       <div className="row">
         <div className="col-4">
-          <h1>Create Category</h1>
+          <h1>Sukurkite kategorija</h1>
           <form onSubmit={onSubmit}>
             <div className="form-group">
-              <label htmlFor="categoryName">Category Name</label>
+              <label htmlFor="categoryName">Kategorijos pavadinimas</label>
               <input
                 type="text"
                 className="form-control"

@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import "bootstrap/dist/js/bootstrap.min.js";
 export const Navbar = () => {
   const user = JSON.parse(localStorage.getItem("token"));
   const navigate = useNavigate();
