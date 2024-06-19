@@ -1,15 +1,22 @@
 import { useState, useEffect } from "react";
 import Navbar from "./Navbar";
+import { useNavigate } from "react-router-dom";
 
 export const IndexPage = () => {
+  const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("token"));
   const authToken = user?.token;
+
   const [holidays, setHolidays] = useState([]);
   const [filteredHolidays, setFilteredHolidays] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [categories, setCategories] = useState([]);
   const [beingFiltered, setBeingFiltered] = useState(false);
   const [userLikes, setUserLikes] = useState([]);
+
+  if (!user) {
+    navigate("/login");
+  }
 
   const fetchHolidays = async () => {
     const response = await fetch("http://localhost:3002/celebration/all");
