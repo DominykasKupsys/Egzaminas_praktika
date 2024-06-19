@@ -68,8 +68,8 @@ const PostController = {
   },
   async UpdatePost(req, res) {
     const { name, date, category, location } = req.body;
-    const formattedDate = new Date(date);
     const id = req.params.id;
+
     try {
       const post = await prisma.celebration.findUnique({
         where: { id: parseInt(id) },
@@ -83,6 +83,16 @@ const PostController = {
           .json({ error: "You are not authorized to update this post" });
       }
 
+      let formattedDate = post.date; // Initialize with existing date
+      if (date) {
+        const parsedDate = new Date(date);
+        if (!isNaN(parsedDate.getTime())) {
+          formattedDate = parsedDate.toISOString();
+        } else {
+          return res.status(400).json({ error: "Invalid date format" });
+        }
+      }
+
       let photoUrl = null;
       if (req.file) {
         photoUrl = req.file.filename;
@@ -92,17 +102,18 @@ const PostController = {
       if (category !== undefined) {
         categoryId = parseInt(category);
       }
+
       const updatedPost = await prisma.celebration.update({
         where: { id: parseInt(id) },
         data: {
           name: name ?? post.name,
-          // date: updatedDate,
-          date: formattedDate.toISOString() ?? post.date,
+          date: formattedDate,
           categoryId: categoryId ?? post.categoryId,
           location: location ?? post.location,
           image: photoUrl ?? post.image,
         },
       });
+
       res
         .status(200)
         .json({ data: updatedPost, message: "Post updated successfully" });
