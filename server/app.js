@@ -8,6 +8,7 @@ var cors = require("cors");
 var usersRouter = require("./routes/users");
 const categoryRouter = require("./routes/category");
 const celebrationRouter = require("./routes/Celebration");
+const ratingRouter = require("./routes/rating");
 var app = express();
 
 app.use(cors());
@@ -23,6 +24,7 @@ app.use("/uploads", express.static("uploads"));
 app.use("/users", usersRouter);
 app.use("/category", categoryRouter);
 app.use("/celebration", celebrationRouter);
+app.use("/rating", ratingRouter);
 
 const port = 3002;
 app.listen(port, () => {

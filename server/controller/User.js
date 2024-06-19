@@ -58,25 +58,25 @@ module.exports = {
       res.status(400).json({ message: "Invalid credentials" });
     }
   },
-  //   async getUserData(req, res) {
-  //     let user_id = null;
-  //     if (req.tokenInfo !== undefined) {
-  //       user_id = req.tokenInfo.user_id;
-  //     } else {
-  //       return res.status(400).json({ error: "User ID not found in token" });
-  //     }
+  async getUserData(req, res) {
+    let user_id = null;
+    if (req.tokenInfo !== undefined) {
+      user_id = req.tokenInfo.user_id;
+    } else {
+      return res.status(400).json({ error: "User ID not found in token" });
+    }
 
-  //     const creator = parseInt(user_id);
+    const creator = parseInt(user_id);
 
-  //     const user = await prisma.user.findUnique({
-  //       where: {
-  //         id: creator,
-  //       },
-  //       include: {
-  //         rating: true,
-  //       },
-  //     });
+    const user = await prisma.user.findUnique({
+      where: {
+        id: creator,
+      },
+      include: {
+        rating: true,
+      },
+    });
 
-  //     res.status(200).json({ data: user });
-  //   },
+    res.status(200).json({ data: user });
+  },
 };
