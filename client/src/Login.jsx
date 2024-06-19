@@ -101,6 +101,16 @@ export const Register = () => {
                         </button>
                       </div>
                     </form>
+                    <p className="text-center text-muted mt-5 mb-0">
+                      Don't have an account?{" "}
+                      <a
+                        href="/register"
+                        className="fw-bold text-body"
+                        onClick={() => navigate("/register")}
+                      >
+                        Register
+                      </a>
+                    </p>
                   </div>
                   <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
                     <img

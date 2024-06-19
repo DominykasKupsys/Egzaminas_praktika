@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import UserIcon from "./IMG/UserIcon.jpg";
+import { useNavigate } from "react-router-dom";
 
 export const AdminPanel = () => {
+  const navigate = useNavigate();
   const [alert, setAlert] = useState("");
   const user = JSON.parse(localStorage.getItem("token"));
   if (!user) {
@@ -75,9 +77,6 @@ export const AdminPanel = () => {
         body: JSON.stringify(values),
       });
       if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-        localStorage.setItem("token", JSON.stringify(data));
         setAlert("Category created successfully");
       }
     } catch (error) {
@@ -100,6 +99,7 @@ export const AdminPanel = () => {
         const data = await response.json();
         console.log(data);
         getAllNotVerifiedPosts();
+        navigate("/");
       }
     } catch (error) {
       console.error("Error occurred during post creation:", error.message);

@@ -31,7 +31,7 @@ export const Register = () => {
         const data = await response.json();
         console.log(data);
         console.log("Registration successful");
-        navigate("/");
+        navigate("/login");
       }
     } catch (error) {
       console.error("Error occurred during registration:", error.message);
@@ -153,6 +153,14 @@ export const Register = () => {
                       alt="Sample image"
                     />
                   </div>
+                </div>
+                <div>
+                  <p className="text-center text-muted mt-5 mb-0">
+                    Have already an account?{" "}
+                    <a href="/login" className="fw-bold text-body">
+                      Login here
+                    </a>
+                  </p>
                 </div>
               </div>
             </div>

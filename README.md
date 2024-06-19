@@ -1,7 +1,7 @@
 #### Paleidimas:
 
 1. susikurkite mysql duomenų bazėje egzaminas lentelę.
-2. paleiskite komandą `npx prisma db seed`.
+2. paleiskite komandas: `npx prisma migrate dev --name init`, `npx prisma db seed`.
 3. Nueikite į server aplanką.
 4. Įveskite `npm run dev`.
 5. Nueikite į client aplanką.

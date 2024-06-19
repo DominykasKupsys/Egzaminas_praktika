@@ -5,6 +5,18 @@ const prisma = new PrismaClient();
 const PostController = {
   async CreatePost(req, res) {
     const { name, date, category, location } = req.body;
+    if (
+      name == null ||
+      date == null ||
+      category == null ||
+      location == null ||
+      name == "" ||
+      date == "" ||
+      category == "" ||
+      location == ""
+    ) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
     let photoUrl = null;
     if (req.file) {
       photoUrl = req.file.filename;
@@ -86,7 +98,7 @@ const PostController = {
           .json({ error: "You are not authorized to update this post" });
       }
 
-      let formattedDate = post.date; // Initialize with existing date
+      let formattedDate = post.date;
       if (date) {
         const parsedDate = new Date(date);
         if (!isNaN(parsedDate.getTime())) {
@@ -131,14 +143,27 @@ const PostController = {
       const post = await prisma.celebration.findUnique({
         where: { id: parseInt(id) },
       });
+
       if (!post) {
         return res.status(404).json({ error: "Post not found" });
       }
+
       if (post.userId !== req.tokenInfo.user_id && req.tokenInfo.role == 0) {
         return res
           .status(403)
           .json({ error: "You are not authorized to delete this post" });
       }
+
+      const rating = await prisma.rating.findMany({
+        where: { celebrationId: parseInt(id) },
+      });
+
+      if (rating.length > 0) {
+        await prisma.rating.deleteMany({
+          where: { celebrationId: parseInt(id) },
+        });
+      }
+
       await prisma.celebration.delete({ where: { id: parseInt(id) } });
 
       res.status(200).json({ message: "Post deleted successfully" });

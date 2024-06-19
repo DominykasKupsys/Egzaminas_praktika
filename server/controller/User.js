@@ -44,10 +44,21 @@ module.exports = {
         email: email,
       },
     });
+
+    if (!user) {
+      return res.status(400).json({ message: "User does not exist" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Incorrect password" });
+    }
+
     if (user && (await bcrypt.compare(password, user.password))) {
       const token = jwt.sign({ user_id: user.id, email }, "secret", {
         expiresIn: "2h",
       });
+
       const updatedUser = await prisma.user.update({
         where: { id: user.id },
         data: { token: token },
