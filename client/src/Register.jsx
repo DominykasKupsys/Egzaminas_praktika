@@ -31,7 +31,7 @@ export const Register = () => {
         const data = await response.json();
         console.log(data);
         console.log("Registration successful");
-        // navigate("/");
+        navigate("/");
       }
     } catch (error) {
       console.error("Error occurred during registration:", error.message);

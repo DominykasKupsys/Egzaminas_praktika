@@ -29,7 +29,7 @@ export const Register = () => {
         console.log(data);
         localStorage.setItem("token", JSON.stringify(data));
         console.log("Login successful");
-        // navigate("/");
+        navigate("/");
       }
     } catch (error) {
       console.error("Error occurred during registration:", error.message);

@@ -6,6 +6,7 @@ var bodyParser = require("body-parser");
 var cors = require("cors");
 
 var usersRouter = require("./routes/users");
+const categoryRouter = require("./routes/category");
 var app = express();
 
 app.use(cors());
@@ -18,6 +19,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/users", usersRouter);
+app.use("/category", categoryRouter);
 
 const port = 3002;
 app.listen(port, () => {
