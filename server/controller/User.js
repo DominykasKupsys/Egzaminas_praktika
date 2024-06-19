@@ -79,4 +79,33 @@ module.exports = {
 
     res.status(200).json({ data: user });
   },
+  async getUsers(req, res) {
+    const users = await prisma.user.findMany({
+      where: {
+        isBlocked: 0,
+        role: 0,
+      },
+    });
+    res.status(200).json({ data: users });
+  },
+  async updateUser(req, res) {
+    if (req.tokenInfo.role === 0) {
+      return res
+        .status(403)
+        .json({ error: "You are not authorized to block this user" });
+    }
+    const id = parseInt(req.params.id);
+    try {
+      const users = await prisma.user.update({
+        where: { id: id },
+        data: {
+          isBlocked: 1,
+        },
+      });
+      res.status(200).json({ data: users });
+    } catch (error) {
+      console.error("Error blocking user:", error);
+      res.status(500).json({ error: "Failed to block user" });
+    }
+  },
 };

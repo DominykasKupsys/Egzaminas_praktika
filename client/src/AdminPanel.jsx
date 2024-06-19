@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import UserIcon from "./IMG/UserIcon.jpg";
 
 export const AdminPanel = () => {
   const [alert, setAlert] = useState("");
@@ -11,6 +12,7 @@ export const AdminPanel = () => {
     name: "",
   });
   const [holiday, setHoliday] = useState([]);
+  const [users, setUsers] = useState([]);
   const HandleChange = (e) => {
     const { name, value } = e.target;
     setValues({ ...values, [name]: value });
@@ -36,8 +38,27 @@ export const AdminPanel = () => {
     }
   };
 
+  const getAllUsers = async () => {
+    try {
+      const response = await fetch("http://localhost:3002/users/all", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        setUsers(data.data);
+      }
+    } catch (error) {
+      console.error("Error occurred during registration:", error.message);
+    }
+  };
+
   useEffect(() => {
     getAllNotVerifiedPosts();
+    getAllUsers();
   }, []);
 
   const onSubmit = async (e) => {
@@ -73,7 +94,6 @@ export const AdminPanel = () => {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
-          body: JSON.stringify(values),
         }
       );
       if (response.ok) {
@@ -86,6 +106,33 @@ export const AdminPanel = () => {
     }
   };
 
+  const blocking = async (userId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3002/users/update/${userId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        setAlert("User blocked successfully");
+        getAllUsers();
+      } else {
+        const errorData = await response.json();
+        console.error("Failed to block user:", errorData.error);
+        setAlert(errorData.error || "Failed to block user");
+      }
+    } catch (error) {
+      console.error("Error occurred during user blocking:", error.message);
+      setAlert("An error occurred. Please try again.");
+    }
+  };
   return (
     <>
       {alert && (
@@ -146,8 +193,22 @@ export const AdminPanel = () => {
             </div>
           ))}
         </div>
+        <div className="col-4">
+          <h1>Vartotojai</h1>
+          {users.map((user) => (
+            <div className="card" style={{ width: "18rem" }} key={user.id}>
+              <img src={UserIcon} className="card-img-top" alt="User" />
+              <div className="card-body">
+                <h5 className="card-title">{user.name}</h5>
+                <p className="card-text">{user.email}</p>
+                <button onClick={() => blocking(user.id)}>Block</button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </>
   );
 };
+
 export default AdminPanel;
