@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model celebration {
+  id         Int      @id @default(autoincrement())
+  rating     rating[]
+  userId     Int
+  categoryId Int
+  name       String
+  date       DateTime
+  location   String
+  image      String?
+  isVerified Int
+  user       user     @relation(fields: [userId], references: [id])
+  category   category @relation(fields: [categoryId], references: [id])
+
+  @@index([userId], name: "userId")
+  @@index([categoryId], name: "categoryId")
+}
+
+model user {
+  id          Int           @id @default(autoincrement())
+  celebration celebration[]
+  rating      rating[]
+  name        String
+  email       String
+  password    String
+  role        Int
+  token       String?
+  isBlocked   Int
+}
+
+model category {
+  id          Int           @id @default(autoincrement())
+  celebration celebration[]
+  name        String
+}
+
+model rating {
+  userId        Int
+  celebrationId Int
+  user          user        @relation(fields: [userId], references: [id])
+  celebration   celebration @relation(fields: [celebrationId], references: [id])
+
+  @@id([userId, celebrationId])
+  @@index([userId, celebrationId], name: "userId_celebrationId")
+}
