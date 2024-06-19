@@ -163,7 +163,7 @@ export const Register = () => {
                   </div>
                 </div>
                 <div>
-                  {errors && <p className="text-danger">{errors}</p>}
+                  {errors && <p className="text-danger">{errors.error}</p>}
                   <p className="text-center text-muted mt-5 mb-0">
                     Have already an account?{" "}
                     <a href="/login" className="fw-bold text-body">
