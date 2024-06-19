@@ -149,12 +149,6 @@ const PostController = {
   },
   async GetUserPosts(req, res) {
     const id = parseInt(req.params.id);
-
-    if (req.tokenInfo.role == 0) {
-      return res
-        .status(403)
-        .json({ error: "You are not authorized to verify this posts" });
-    }
     try {
       const posts = await prisma.celebration.findMany({
         where: { userId: id },
