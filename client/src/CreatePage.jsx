@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 export const CreatePage = () => {
+  const [errors, setErrors] = useState({});
   const user = JSON.parse(localStorage.getItem("token"));
   if (!user) {
     window.location.href = "/login";
@@ -65,11 +66,17 @@ export const CreatePage = () => {
         const data = await response.json();
         console.log(data);
         window.location.href = "/";
+      } else {
+        const errorData = await response.json();
+        if (response.status === 400) {
+          setErrors(errorData);
+        }
       }
     } catch (error) {
       console.error("Error occurred during post creation:", error.message);
     }
   };
+  console.log(errors);
   return (
     <div className="d-flex justify-content-center mt-5">
       <form
@@ -159,6 +166,7 @@ export const CreatePage = () => {
           </button>
         </div>
       </form>
+      {errors && <p className="text-danger">{errors.error}</p>}
     </div>
   );
 };

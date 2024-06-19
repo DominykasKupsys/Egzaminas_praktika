@@ -3,6 +3,7 @@ import loginPic from "./IMG/loginPic.webp";
 import { useNavigate } from "react-router-dom";
 
 export const Register = () => {
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const [values, setValues] = useState({
     name: "",
@@ -32,11 +33,18 @@ export const Register = () => {
         console.log(data);
         console.log("Registration successful");
         navigate("/login");
+      } else {
+        const errorData = await response.json();
+        if (response.status === 400) {
+          setErrors(errorData.message);
+        }
       }
     } catch (error) {
       console.error("Error occurred during registration:", error.message);
     }
   };
+
+  console.log(errors);
   return (
     <section className="vh-100" style={{ backgroundColor: "#eee" }}>
       <div className="container h-100">
@@ -155,6 +163,7 @@ export const Register = () => {
                   </div>
                 </div>
                 <div>
+                  {errors && <p className="text-danger">{errors}</p>}
                   <p className="text-center text-muted mt-5 mb-0">
                     Have already an account?{" "}
                     <a href="/login" className="fw-bold text-body">

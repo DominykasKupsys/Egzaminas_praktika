@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 export const Register = () => {
   const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -30,6 +31,11 @@ export const Register = () => {
         localStorage.setItem("token", JSON.stringify(data));
         console.log("Login successful");
         navigate("/");
+      } else {
+        const errorData = await response.json();
+        if (response.status === 400) {
+          setErrors(errorData);
+        }
       }
     } catch (error) {
       console.error("Error occurred during registration:", error.message);
@@ -101,6 +107,9 @@ export const Register = () => {
                         </button>
                       </div>
                     </form>
+                    {errors.message && (
+                      <p className="text-danger">{errors.message}</p>
+                    )}
                     <p className="text-center text-muted mt-5 mb-0">
                       Don't have an account?{" "}
                       <a
